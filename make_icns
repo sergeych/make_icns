@@ -1,0 +1,41 @@
+#!/bin/bash
+
+if [ -z "$1" ] 
+then
+    RED='\033[1;31m'
+    WHITE='\033[1;37m'
+    GREEN='\033[0;32m'
+    NC='\033[0m'
+    echo
+    echo -e "${RED}Error: missing input file.${NC}"
+    echo
+    echo -e "${WHITE}make_icns:$GREEN icns icon generator by real.sergeych@gmail.com.${NC}"
+    echo
+    echo "Usage:"
+    echo
+    echo "make_icns <some_file>.png"
+    echo
+    echo "The source file must be a square png of the size 1024x1024 or like."
+    echo
+    exit 1000
+fi    
+
+input_filepath=$1
+name="${1%.*}"
+output_iconset_name="${name}.iconset"
+
+mkdir $output_iconset_name
+
+sips -z 16 16     $input_filepath --out "${output_iconset_name}/icon_16x16.png"
+sips -z 32 32     $input_filepath --out "${output_iconset_name}/icon_16x16@2x.png"
+sips -z 32 32     $input_filepath --out "${output_iconset_name}/icon_32x32.png"
+sips -z 64 64     $input_filepath --out "${output_iconset_name}/icon_32x32@2x.png"
+sips -z 128 128   $input_filepath --out "${output_iconset_name}/icon_128x128.png"
+sips -z 256 256   $input_filepath --out "${output_iconset_name}/icon_128x128@2x.png"
+sips -z 256 256   $input_filepath --out "${output_iconset_name}/icon_256x256.png"
+sips -z 512 512   $input_filepath --out "${output_iconset_name}/icon_256x256@2x.png"
+sips -z 512 512   $input_filepath --out "${output_iconset_name}/icon_512x512.png"
+
+iconutil -c icns $output_iconset_name
+
+rm -R $output_iconset_name
